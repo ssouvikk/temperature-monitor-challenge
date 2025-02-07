@@ -5,7 +5,6 @@ import { Container, Card, ListGroup, Badge, Row, Col } from "react-bootstrap";
 
 const socket = io("http://localhost:5000");
 
-// ⏳ সময় গোনার ফাংশন
 const getTimeAgo = (timestamp) => {
     if (!timestamp) return "N/A";
     const now = new Date();
@@ -26,9 +25,9 @@ const TemperatureMonitor = () => {
     const [temperatureData, setTemperatureData] = useState([]);
     const [currentTemp, setCurrentTemp] = useState(null);
     const [lastUpdated, setLastUpdated] = useState(null);
-    const [timeAgo, setTimeAgo] = useState("N/A"); // ✅ UI-তে সময় রিফ্রেশ করার জন্য state
+    const [timeAgo, setTimeAgo] = useState("N/A"); 
 
-    // 🔥 Backend থেকে ডাটা আনছে
+    
     useEffect(() => {
         axios.get("http://localhost:5000/api/temperatures")
             .then(response => {
@@ -49,11 +48,10 @@ const TemperatureMonitor = () => {
         return () => socket.off("temperatureUpdate");
     }, []);
 
-    // 🔥 প্রতি ১ সেকেন্ডে `lastUpdated` কে রিফ্রেশ করার জন্য useEffect
     useEffect(() => {
         const interval = setInterval(() => {
             if (lastUpdated) {
-                setTimeAgo(getTimeAgo(lastUpdated)); // ✅ প্রতি সেকেন্ডে `lastUpdated` পরিবর্তন করবে
+                setTimeAgo(getTimeAgo(lastUpdated)); 
             }
         }, 1000);
         return () => clearInterval(interval);
