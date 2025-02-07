@@ -2,9 +2,20 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import { Container, Card, ListGroup, Badge, Row, Col } from "react-bootstrap";
-import { getTimeAgo } from "../utils/timeUtils";
 
 const socket = io("http://localhost:5000");
+
+// ⏳ সময় গোনার ফাংশন
+const getTimeAgo = (timestamp) => {
+    if (!timestamp) return "N/A";
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diffInSeconds = Math.floor((now - time) / 1000);
+
+    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    return `${diffInMinutes} minutes ago`;
+};
 
 const getStatus = (temperature) => {
     if (temperature >= 24) return { text: "HIGH", variant: "warning" };
@@ -14,8 +25,10 @@ const getStatus = (temperature) => {
 const TemperatureMonitor = () => {
     const [temperatureData, setTemperatureData] = useState([]);
     const [currentTemp, setCurrentTemp] = useState(null);
-    const [lastUpdated, setLastUpdated] = useState("");
+    const [lastUpdated, setLastUpdated] = useState(null);
+    const [timeAgo, setTimeAgo] = useState("N/A"); // ✅ UI-তে সময় রিফ্রেশ করার জন্য state
 
+    // 🔥 Backend থেকে ডাটা আনছে
     useEffect(() => {
         axios.get("http://localhost:5000/api/temperatures")
             .then(response => {
@@ -36,10 +49,11 @@ const TemperatureMonitor = () => {
         return () => socket.off("temperatureUpdate");
     }, []);
 
+    // 🔥 প্রতি ১ সেকেন্ডে `lastUpdated` কে রিফ্রেশ করার জন্য useEffect
     useEffect(() => {
         const interval = setInterval(() => {
             if (lastUpdated) {
-                setLastUpdated(lastUpdated); 
+                setTimeAgo(getTimeAgo(lastUpdated)); // ✅ প্রতি সেকেন্ডে `lastUpdated` পরিবর্তন করবে
             }
         }, 1000);
         return () => clearInterval(interval);
@@ -59,7 +73,7 @@ const TemperatureMonitor = () => {
                             <Badge bg={getStatus(currentTemp?.temperature).variant} className="fs-6">
                                 {getStatus(currentTemp?.temperature).text}
                             </Badge>
-                            <p className="text-muted mt-2">Last updated: {getTimeAgo(lastUpdated)}</p>
+                            <p className="text-muted mt-2">Last updated: {timeAgo}</p>
                         </Card.Body>
                     </Card>
 
