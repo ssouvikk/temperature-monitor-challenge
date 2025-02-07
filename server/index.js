@@ -4,7 +4,7 @@ const socketIo = require("socket.io");
 const cors = require("cors");
 const mongoose = require('mongoose')
 const { PORT, DB_URL, FRONT_URL } = require('./Config');
-const { Temperature } = require("./app/Models");
+const { Temperature } = require("./Models");
 
 const app = express();
 app.use(express.json());
