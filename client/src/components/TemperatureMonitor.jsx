@@ -3,7 +3,12 @@ import io from "socket.io-client";
 import axios from "axios";
 import { Container, Card, ListGroup, Badge, Row, Col } from "react-bootstrap";
 
-const socket = io("http://localhost:5000");
+// WebSocket Connection (Ensure Proper URL)
+const socket = io("http://localhost:6000", {
+    transports: ["websocket"], // Force WebSocket Only
+    reconnectionAttempts: 5, // Try reconnecting 5 times
+    reconnectionDelay: 3000 // Wait 3s before retry
+});
 
 const getTimeAgo = (timestamp) => {
     if (!timestamp) return "N/A";
@@ -25,9 +30,8 @@ const TemperatureMonitor = () => {
     const [temperatureData, setTemperatureData] = useState([]);
     const [currentTemp, setCurrentTemp] = useState(null);
     const [lastUpdated, setLastUpdated] = useState(null);
-    const [timeAgo, setTimeAgo] = useState("N/A"); 
+    const [timeAgo, setTimeAgo] = useState("N/A");
 
-    
     useEffect(() => {
         axios.get("http://localhost:5000/api/temperatures")
             .then(response => {
@@ -39,19 +43,27 @@ const TemperatureMonitor = () => {
             })
             .catch(error => console.error("Error fetching data:", error));
 
+        console.log(socket)
+        // WebSocket Event Handling
+        socket.on("connect", () => console.log("✅ WebSocket Connected"));
+        socket.on("disconnect", () => console.log("❌ WebSocket Disconnected"));
+
         socket.on("temperatureUpdate", (newTemp) => {
+            console.log("📡 Received Temperature Update:", newTemp);
             setTemperatureData(prevData => [newTemp, ...prevData].slice(0, 10));
             setCurrentTemp(newTemp);
             setLastUpdated(newTemp.timestamp);
         });
 
-        return () => socket.off("temperatureUpdate");
+        return () => {
+            socket.off("temperatureUpdate");
+        };
     }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (lastUpdated) {
-                setTimeAgo(getTimeAgo(lastUpdated)); 
+                setTimeAgo(getTimeAgo(lastUpdated));
             }
         }, 1000);
         return () => clearInterval(interval);
