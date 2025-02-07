@@ -9,7 +9,8 @@ const server = http.createServer(app);
 
 const io = socketIo(server, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"]
     }
 });
 
@@ -26,6 +27,10 @@ io.on("connection", (socket) => {
     });
 });
 
+app.get("/", (req, res) => {
+    res.send("WebSocket server is running...");
+});
+
 // Fetch Temperature Data from API and Emit to Clients
 setInterval(async () => {
     try {
@@ -40,5 +45,5 @@ setInterval(async () => {
 }, 5000);
 
 // Start Server
-const PORT = 6000;
+const PORT = 6001;
 server.listen(PORT, () => console.log(`🚀 WebSocket Service running on port ${PORT}`));
