@@ -34,6 +34,15 @@ app.post("/api/temperature", async (req, res) => {
     }
 });
 
+app.get("/api/temperature", async (req, res) => {
+    try {
+        const data = await Temperature.find().sort({ timestamp: -1 }).limit(10);
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: "❌ Could not fetch data" });
+    }
+});
+
 
 app.all('*', (req, res) => res.status(501).json({ status: 501, success: false, data: null, message: 'Not implemented!' }))
 

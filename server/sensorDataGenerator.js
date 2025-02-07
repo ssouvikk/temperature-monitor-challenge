@@ -1,9 +1,8 @@
 const axios = require("axios");
+const { BACK_URL } = require("./Config");
 
 
-function generateRandomTemperature() {
-    return (Math.random() * (40 - 10) + 10).toFixed(2);
-}
+const generateRandomTemperature = () => (Math.random() * (40 - 10) + 10).toFixed(2)
 
 
 setInterval(async () => {
@@ -16,7 +15,7 @@ setInterval(async () => {
     console.log("📡 Sending data:", sensorData);
 
     try {
-        await axios.post("http://localhost:5000/api/temperature", sensorData);
+        await axios.post(BACK_URL + "/api/temperature", sensorData);
         console.log("✅ Data sent successfully");
     } catch (error) {
         console.error("❌ Problem in sending data", error.message);
