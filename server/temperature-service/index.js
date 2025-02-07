@@ -10,18 +10,6 @@ app.use(cors());
 
 mongoose.connect(DB_URL).then(() => console.log("✅ Database Connected!"));
 
-app.post("/api/temperatures", async (req, res) => {
-    try {
-        const { sensorId, temperature, timestamp } = req.body;
-        const newReading = new Temperature({ sensorId, temperature, timestamp });
-        await newReading.save();
-
-        res.status(201).json({ message: "✅ Temperature data saved!", data: newReading });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
 app.get("/api/temperatures", async (req, res) => {
     try {
         const data = await Temperature.find().sort({ timestamp: -1 }).limit(10);

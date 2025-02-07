@@ -1,12 +1,12 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const axios = require("axios");
+const { Temperature } = require("../Models");
 
 const app = express();
 const server = http.createServer(app);
-
 const io = socketIo(server, {
     cors: {
         origin: "http://localhost:3000",
@@ -14,7 +14,11 @@ const io = socketIo(server, {
     }
 });
 
-// Middleware
+// MongoDB কানেকশন
+mongoose.connect("mongodb://localhost:27017/temperatureDB").then(() => {
+    console.log("✅ Database Connected!");
+});
+
 app.use(cors());
 app.use(express.json());
 
@@ -22,27 +26,21 @@ app.use(express.json());
 io.on("connection", (socket) => {
     console.log("✅ New WebSocket Client Connected");
 
+    socket.on("newTemperatureData", async (data) => {
+        console.log("📡 Received Data from Sensor:", data);
+
+        // MongoDB-তে সেভ করা
+        const newReading = new Temperature(data);
+        await newReading.save();
+
+        // লাইভ আপডেট ব্রডকাস্ট করা
+        io.emit("temperatureUpdate", newReading);
+    });
+
     socket.on("disconnect", () => {
         console.log("❌ Client Disconnected");
     });
 });
-
-app.get("/", (req, res) => {
-    res.send("WebSocket server is running...");
-});
-
-// Fetch Temperature Data from API and Emit to Clients
-setInterval(async () => {
-    try {
-        const { data } = await axios.get("http://localhost:5000/api/temperatures");
-        if (data.length > 0) {
-            io.emit("temperatureUpdate", data[0]);
-            console.log("📡 Sent Data to Clients:", data[0]);
-        }
-    } catch (error) {
-        console.error("❌ WebSocket Error:", error.message);
-    }
-}, 5000);
 
 // Start Server
 const PORT = 6001;
