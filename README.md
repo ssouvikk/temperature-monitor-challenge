@@ -1,97 +1,134 @@
-### 📜 **README.md** (Temperature Monitoring System)  
+# Temperature Monitoring System (Microservices-Based)
+
+This is a **Microservices-Based Temperature Monitoring System** that consists of three independent services:
+
+1. **Sensor Service** - Generates random temperature data and sends it to the API.
+2. **Temperature Service** - Stores temperature data in MongoDB and provides RESTful APIs.
+3. **WebSocket Service** - Handles real-time temperature updates using WebSockets.
+
+It also includes a **React-based frontend** that displays real-time temperature readings.
 
 ---
 
-# **🌡️ Temperature Monitoring System**  
-
-A **real-time temperature monitoring application** built with **microservices architecture**, where the **server** handles data and WebSockets, and the **client** displays real-time temperature updates.  
-
----
-
-## 📌 **Project Structure**  
-```bash
-📦 temperature-monitor  
- ┣ 📂 client      # (React Frontend - UI)  
- ┣ 📂 server      # (Node.js Backend - API & WebSocket)  
- ┣ 📜 README.md   # (This file)  
+## 📁 Folder Structure
+```
+📦 temperature-monitor-microservices
+ ┣ 📂 sensor-service       # (Sensor data generator)
+ ┣ 📂 temperature-service  # (API & Database Service)
+ ┣ 📂 websocket-service    # (Real-time WebSocket updates)
+ ┣ 📂 client               # (React Frontend)
+ ┣ 📜 README.md
 ```
 
 ---
 
-## 🔧 **Prerequisites**  
-Make sure the following tools are installed on your system:  
-1️⃣ **[Node.js (v20.11.1)](https://nodejs.org/)**  
-2️⃣ **[MongoDB](https://www.mongodb.com/try/download/community)** (Must be running)  
+## 🚀 Prerequisites
+
+Make sure you have the following installed:
+
+- **Node.js v20.11.1**
+- **MongoDB** (Running locally or using a cloud provider like MongoDB Atlas)
 
 ---
 
-## 🚀 **Installation & Running the Application**  
+## ⚙️ Installation & Setup
 
-### 1️⃣ **Clone the Repository**  
-```bash
-git clone <repo-url>
-cd temperature-monitor
-```
+Follow these steps to install and run the services.
 
-### 2️⃣ **Install Dependencies**  
+
+
+### 2️⃣ Install Dependencies
+Run the following commands in **root** folder & in **each** service folder (`temperature-service`, `sensor-service`, `websocket-service`, and `client`).
+
 ```bash
-cd server
 npm install
-cd ../client
-npm install
 ```
 
-### 3️⃣ **Start MongoDB**  
-- **MongoDB must be running**  
-- If MongoDB is **not installed**, [click here](https://www.mongodb.com/try/download/community) to install it.  
-- **Start MongoDB locally (default port `27017`)**  
-  ```bash
-  mongod --dbpath <your-db-path>
-  ```
+---
 
-### 4️⃣ **Start the Server**  
+## 🏃 Running the Services
+
+### 1️⃣ Start Temperature Service (API & Database)
 ```bash
-cd server
+cd temperature-service
 node index.js
 ```
-- The server will run at **http://localhost:5000/**  
 
-
-### 4️⃣ **Start the IOT Script**  
+### 2️⃣ Start WebSocket Service (Real-time updates)
 ```bash
-cd server
-node sensorDataGenerator.js
+cd websocket-service
+node index.js
 ```
 
-### 5️⃣ **Start the Frontend**  
+### 3️⃣ Start Sensor Service (Data Generator)
+```bash
+cd sensor-service
+node index.js
+```
+
+### 4️⃣ Start Frontend (React Application)
 ```bash
 cd client
 npm start
 ```
-- The application will run in your browser at **http://localhost:3000/**  
 
 ---
 
-## ⚡ **Features**  
-✔️ **Real-time temperature updates** (using WebSockets)  
-✔️ **MongoDB for data storage**  
-✔️ **"Last updated X seconds ago" updates every second**  
-✔️ **Beautiful UI with React-Bootstrap**  
-✔️ **🔥 And much more!**  
+## 🔗 API Endpoints (Temperature Service)
+
+| Method | Endpoint                 | Description                         |
+|--------|--------------------------|-------------------------------------|
+| `POST` | `/api/temperatures`       | Add a new temperature reading      |
+| `GET`  | `/api/temperatures`       | Get the latest 10 temperature data |
+
+Example **POST request**:
+```json
+{
+  "sensorId": "sensor-123",
+  "temperature": 22.5,
+  "timestamp": "2024-02-07T12:34:56Z"
+}
+```
 
 ---
 
-## 🛠 **Tech Stack**  
+## 🌐 WebSocket Events (Real-time updates)
 
-📌 **Backend:** Node.js (v20.11.1), Express.js, MongoDB, WebSockets  
-📌 **Frontend:** React.js, React-Bootstrap, Socket.io-client  
-📌 **Database:** MongoDB  
+| Event Name          | Description |
+|---------------------|-------------|
+| `temperatureUpdate` | Sends the latest temperature data to all connected clients |
+
+Example:
+```javascript
+socket.on("temperatureUpdate", (data) => {
+    console.log("New Temperature: ", data);
+});
+```
 
 ---
 
-## 💡 **Need Help?**  
-If you **face any issues** or find **bugs**, please open an **Issue** or contact me! 😊  
+## 📌 Features & Benefits
+✅ **Microservices Architecture** - Independent services for better scalability.  
+✅ **Real-time Updates** - Uses WebSockets for live temperature monitoring.  
+✅ **MongoDB Database** - Stores temperature readings efficiently.  
+✅ **React Frontend** - Displays real-time data in a user-friendly UI.  
+✅ **Easy Deployment** - No Docker required, runs on simple Node.js services.  
 
 ---
 
-**✍️ Developed by Souvik Mondal** 🚀
+## 🎯 Next Steps & Improvements
+- Implement **RabbitMQ/Kafka** for better microservices communication.
+- Add **Authentication & Authorization** for security.
+- Deploy services using **Kubernetes or Cloud Functions**.
+
+---
+
+## 📜 License
+This project is open-source and available under the **MIT License**.
+
+---
+
+### 💡 Need Help?
+If you have any questions, feel free to open an issue or contribute to the project!
+
+🚀 Happy Coding!
