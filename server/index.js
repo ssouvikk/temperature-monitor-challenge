@@ -28,11 +28,15 @@ app.post("/api/temperature", async (req, res) => {
         const { sensorId, temperature, timestamp } = req.body;
         const newReading = new Temperature({ sensorId, temperature, timestamp });
         await newReading.save();
-        res.status(201).json({ message: "✅ Temperature data saved!" });
+
+        io.emit("temperatureUpdate", newReading);
+
+        res.status(201).json({ message: "✅ Temperature data saved!", data: newReading });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 app.get("/api/temperature", async (req, res) => {
     try {
