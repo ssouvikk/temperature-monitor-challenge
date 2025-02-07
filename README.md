@@ -1,141 +1,97 @@
-# Real-Time Temperature Monitoring System Challenge 🚀
+### 📜 **README.md** (Temperature Monitoring System)  
 
-Welcome to our Senior Full-Stack Developer technical challenge! This challenge invites you to build a modern, real-time temperature monitoring system that showcases your expertise in full-stack development and microservices architecture.
+---
 
-## 🎯 Challenge Overview
+# **🌡️ Temperature Monitoring System**  
 
-Create a sophisticated real-time temperature monitoring system that processes and visualizes temperature data through a modern web interface. Your solution will demonstrate your ability to:
+A **real-time temperature monitoring application** built with **microservices architecture**, where the **server** handles data and WebSockets, and the **client** displays real-time temperature updates.  
 
--   Implement real-time data streams
--   Design service-oriented architecture
--   Create responsive user interfaces
--   Integrate workflow automation
--   Handle distributed system challenges
+---
 
-## 🏗️ System Architecture
-
-![System Architecture](./assets/architecture.png)
-
-The system comprises four main components:
-
--   **Frontend**: Real-time dashboard built with React
--   **Backend**: Node.js service for data generation and processing
--   **Database**: MongoDB for data persistence
--   **Processing**: n8n workflow (preferred) or Node.js processing service
-
-### Processing Approach Options
-
-1. **Preferred Approach: n8n Workflow Integration**
-
-    - Implement temperature processing using n8n workflows
-    - Demonstrates ability to work with workflow automation tools
-    - Shows understanding of service integration
-
-2. **Alternative Approach: Node.js Processing**
-    - Implement temperature processing directly in Node.js
-    - Use if n8n integration presents significant challenges
-    - Must maintain same data flow and processing logic
-
-## 💡 Core Features
-
-### Main Dashboard
-
-![Main Dashboard](./assets/normal-state.png)
-
--   Real-time temperature display (2-second updates)
--   Connection status indicator
--   Last 5 readings with timestamps
--   Status badges (NORMAL/HIGH) updated after processing
-    -   Initial reading shows temperature only
-    -   Status updates post-processing
-
-## ⏱️ Time Expectations
-
-While you have 24 hours to submit, expect to spend 2-3 hours of focused development time. The window allows for:
-
--   Core implementation
--   Documentation
--   Testing and refinement
--   Optional n8n workflow setup
-
-## 📋 Submission Requirements
-
-### Repository Structure
-
-```
-your-solution/
-├── frontend/
-│   ├── src/
-│   └── Dockerfile
-├── backend/
-│   ├── src/
-│   └── Dockerfile
-├── n8n/               # If using n8n approach
-│   └── workflows/
-├── docker-compose.yml
-└── README.md
+## 📌 **Project Structure**  
+```bash
+📦 temperature-monitor  
+ ┣ 📂 client      # (React Frontend - UI)  
+ ┣ 📂 server      # (Node.js Backend - API & WebSocket)  
+ ┣ 📜 README.md   # (This file)  
 ```
 
-### Required Documentation
+---
 
-1. Setup Instructions
-2. API Documentation
-3. Architecture Overview
-4. Processing Approach Documentation
-    - Clearly indicate chosen approach
-    - Explain implementation decisions
+## 🔧 **Prerequisites**  
+Make sure the following tools are installed on your system:  
+1️⃣ **[Node.js (v20.11.1)](https://nodejs.org/)**  
+2️⃣ **[MongoDB](https://www.mongodb.com/try/download/community)** (Must be running)  
 
-## 🎯 Evaluation Criteria
+---
 
-### Technical Excellence (40%)
+## 🚀 **Installation & Running the Application**  
 
--   Code quality and organization
--   System architecture
--   Performance considerations
--   Error handling
--   Testing approach
+### 1️⃣ **Clone the Repository**  
+```bash
+git clone <repo-url>
+cd temperature-monitor
+```
 
-### Feature Implementation (30%)
+### 2️⃣ **Install Dependencies**  
+```bash
+cd server
+npm install
+cd ../client
+npm install
+```
 
--   Real-time functionality
--   Data processing implementation
-    -   n8n implementation (+10 bonus points)
-    -   Node.js implementation (standard points)
--   UI/UX execution
--   Service integration
+### 3️⃣ **Start MongoDB**  
+- **MongoDB must be running**  
+- If MongoDB is **not installed**, [click here](https://www.mongodb.com/try/download/community) to install it.  
+- **Start MongoDB locally (default port `27017`)**  
+  ```bash
+  mongod --dbpath <your-db-path>
+  ```
 
-### Best Practices (30%)
+### 4️⃣ **Start the Server**  
+```bash
+cd server
+node index.js
+```
+- The server will run at **http://localhost:5000/**  
 
--   Documentation quality
--   Git practices
--   Code organization
--   Development setup
 
-## 🚀 Getting Started
+### 4️⃣ **Start the IOT Script**  
+```bash
+cd server
+node sensorDataGenerator.js
+```
 
-1. Review `specification.md`
-2. Choose processing approach
-3. Begin implementation
+### 5️⃣ **Start the Frontend**  
+```bash
+cd client
+npm start
+```
+- The application will run in your browser at **http://localhost:3000/**  
 
-## 📮 Submission Process
+---
 
-1. Create a public GitHub repository
-2. Implement your solution
-3. Add comprehensive documentation
-4. Share the repository URL
+## ⚡ **Features**  
+✔️ **Real-time temperature updates** (using WebSockets)  
+✔️ **MongoDB for data storage**  
+✔️ **"Last updated X seconds ago" updates every second**  
+✔️ **Beautiful UI with React-Bootstrap**  
+✔️ **🔥 And much more!**  
 
-## 🎯 Success Criteria
+---
 
-Your solution should demonstrate:
+## 🛠 **Tech Stack**  
 
--   Clean, maintainable code
--   Robust real-time data handling
--   Thoughtful architecture decisions
--   Professional documentation
--   Successful processing implementation (either approach)
+📌 **Backend:** Node.js (v20.11.1), Express.js, MongoDB, WebSockets  
+📌 **Frontend:** React.js, React-Bootstrap, Socket.io-client  
+📌 **Database:** MongoDB  
 
-Ready to showcase your expertise? Let's see what you can build! 🚀
+---
 
-## 🤝 Questions?
+## 💡 **Need Help?**  
+If you **face any issues** or find **bugs**, please open an **Issue** or contact me! 😊  
 
-For any clarifications, feel free to reach out via LinkedIn.
+---
+
+**✍️ Developed by Souvik Mondal** 🚀
