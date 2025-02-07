@@ -1,32 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import io from "socket.io-client";
-import TemperatureChart from "./components/TemperatureChart";
-import { BASE_API } from "./utils/constants";
+import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const socket = io("http://localhost:5000");
+import TemperatureMonitor from "./components/TemperatureMonitor";
+
 
 const App = () => {
-  const [temperatureData, setTemperatureData] = useState([]);
-
-  useEffect(() => {
-    axios.get(BASE_API + "temperature")
-      .then(response => setTemperatureData(response.data))
-      .catch(error => console.error("Error fetching data:", error));
-
-    socket.on("temperatureUpdate", (newTemp) => {
-      setTemperatureData(prevData => [newTemp, ...prevData].slice(0, 10));
-    });
-
-    return () => socket.off("temperatureUpdate");
-  }, []);
-
-  return (
-    <div style={{ maxHeight: "85vh" }} >
-      <h1>🌡️ Real-Time Temperature Monitoring</h1>
-      <TemperatureChart data={temperatureData} />
-    </div>
-  );
+    return (
+        <div className="bg-light min-vh-100 d-flex align-items-center justify-content-center">
+            <TemperatureMonitor />
+        </div>
+    );
 };
 
 export default App;

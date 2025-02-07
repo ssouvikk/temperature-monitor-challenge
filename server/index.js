@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
 
 app.get("/", (req, res) => res.send("Server is running"));
 
-app.post("/api/temperature", async (req, res) => {
+app.post("/api/temperatures", async (req, res) => {
     try {
         const { sensorId, temperature, timestamp } = req.body;
         const newReading = new Temperature({ sensorId, temperature, timestamp });
@@ -38,7 +38,7 @@ app.post("/api/temperature", async (req, res) => {
 });
 
 
-app.get("/api/temperature", async (req, res) => {
+app.get("/api/temperatures", async (req, res) => {
     try {
         const data = await Temperature.find().sort({ timestamp: -1 }).limit(10);
         res.json(data);
