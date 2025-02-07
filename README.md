@@ -1,134 +1,106 @@
-# Temperature Monitoring System (Microservices-Based)
+# 📡 Temperature Monitoring System (Microservices-Based)
 
-This is a **Microservices-Based Temperature Monitoring System** that consists of three independent services:
-
-1. **Sensor Service** - Generates random temperature data and sends it to the API.
-2. **Temperature Service** - Stores temperature data in MongoDB and provides RESTful APIs.
-3. **WebSocket Service** - Handles real-time temperature updates using WebSockets.
-
-It also includes a **React-based frontend** that displays real-time temperature readings.
+## 🚀 Overview
+This project is a **microservices-based** real-time **temperature monitoring system** using **WebSocket** for efficient data transmission. It eliminates unnecessary API calls by sending sensor data **directly to the WebSocket service**, which then stores it in **MongoDB** and broadcasts live updates to the client.
 
 ---
 
-## 📁 Folder Structure
+## 📂 Folder Structure
 ```
-📦 temperature-monitor-microservices
- ┣ 📂 sensor-service       # (Sensor data generator)
- ┣ 📂 temperature-service  # (API & Database Service)
- ┣ 📂 websocket-service    # (Real-time WebSocket updates)
- ┣ 📂 client               # (React Frontend)
- ┣ 📜 README.md
+/temperature-monitoring-system
+│── /client               # Frontend (React.js)
+│── /sensor-service       # Simulates temperature sensor
+│── /temperature-service  # Stores and serves temperature data
+│── /websocket-service    # Handles real-time WebSocket communication
+│── /models               # MongoDB Schema Models
+│── /config               # Configuration Files (PORTs, DB URLs, etc.)
 ```
 
 ---
 
-## 🚀 Prerequisites
-
-Make sure you have the following installed:
-
-- **Node.js v20.11.1**
-- **MongoDB** (Running locally or using a cloud provider like MongoDB Atlas)
+## 🛠️ Technologies Used
+- **Node.js** (v20.11.1)
+- **Express.js**
+- **Socket.IO** (WebSocket communication)
+- **MongoDB** (Database)
+- **Mongoose** (ODM for MongoDB)
+- **React.js** (Frontend UI)
+- **Axios** (HTTP Requests)
 
 ---
 
-## ⚙️ Installation & Setup
-
-Follow these steps to install and run the services.
-
-
-
-### 2️⃣ Install Dependencies
-Run the following commands in **root** folder & in **each** service folder (`temperature-service`, `sensor-service`, `websocket-service`, and `client`).
-
-```bash
+## 🏗️ Installation & Setup
+### 1️⃣ Install Dependencies
+Run the following command in root folder & inside each microservice folder (**sensor-service, temperature-service, websocket-service, and client**):
+```sh
 npm install
 ```
 
----
-
-## 🏃 Running the Services
-
-### 1️⃣ Start Temperature Service (API & Database)
-```bash
+### 2️⃣ Start the Microservices
+#### 🔥 Start the **Temperature Service** (Port: `5000`)
+```sh
 cd temperature-service
 node index.js
 ```
-
-### 2️⃣ Start WebSocket Service (Real-time updates)
-```bash
+#### 📡 Start the **WebSocket Service** (Port: `6001`)
+```sh
 cd websocket-service
-node index.js
+node websocket-service.js
 ```
-
-### 3️⃣ Start Sensor Service (Data Generator)
-```bash
+#### 🌡️ Start the **Sensor Service** (Simulates Temperature Readings)
+```sh
 cd sensor-service
-node index.js
+node sensor-service.js
 ```
-
-### 4️⃣ Start Frontend (React Application)
-```bash
+#### 🎨 Start the **Client (React Frontend)** (Port: `3000`)
+```sh
 cd client
 npm start
 ```
 
----
-
-## 🔗 API Endpoints (Temperature Service)
-
-| Method | Endpoint                 | Description                         |
-|--------|--------------------------|-------------------------------------|
-| `POST` | `/api/temperatures`       | Add a new temperature reading      |
-| `GET`  | `/api/temperatures`       | Get the latest 10 temperature data |
-
-Example **POST request**:
-```json
-{
-  "sensorId": "sensor-123",
-  "temperature": 22.5,
-  "timestamp": "2024-02-07T12:34:56Z"
-}
+### 3️⃣ Ensure MongoDB is Running
+Make sure **MongoDB** is installed and running. If not, install it and start it:
+```sh
+mongod --dbpath /path/to/database
 ```
 
 ---
 
-## 🌐 WebSocket Events (Real-time updates)
-
-| Event Name          | Description |
-|---------------------|-------------|
-| `temperatureUpdate` | Sends the latest temperature data to all connected clients |
-
-Example:
-```javascript
-socket.on("temperatureUpdate", (data) => {
-    console.log("New Temperature: ", data);
-});
-```
+## 📌 How It Works
+1️⃣ **Sensor Service** generates random temperature data and sends it **directly via WebSocket** to **WebSocket Service**.
+2️⃣ **WebSocket Service** stores the received data into **MongoDB** and **broadcasts** live updates to all connected clients.
+3️⃣ **Temperature Service** provides historical data via API (`GET /api/temperatures`).
+4️⃣ **Client Application** listens for WebSocket updates and displays real-time temperature.
 
 ---
 
-## 📌 Features & Benefits
-✅ **Microservices Architecture** - Independent services for better scalability.  
-✅ **Real-time Updates** - Uses WebSockets for live temperature monitoring.  
-✅ **MongoDB Database** - Stores temperature readings efficiently.  
-✅ **React Frontend** - Displays real-time data in a user-friendly UI.  
-✅ **Easy Deployment** - No Docker required, runs on simple Node.js services.  
+## 📡 WebSocket Events
+| Event Name              | Origin Service  | Description |
+|-------------------------|----------------|-------------|
+| `newTemperatureData`    | Sensor Service | Sent when new temperature data is generated |
+| `temperatureUpdate`     | WebSocket Service | Broadcasts live temperature updates to all clients |
 
 ---
 
-## 🎯 Next Steps & Improvements
-- Implement **RabbitMQ/Kafka** for better microservices communication.
-- Add **Authentication & Authorization** for security.
-- Deploy services using **Kubernetes or Cloud Functions**.
+## 🔥 API Endpoints (Temperature Service)
+| Method | Endpoint                 | Description |
+|--------|--------------------------|-------------|
+| GET    | `/api/temperatures`       | Fetch last 10 temperature readings |
 
 ---
 
-## 📜 License
-This project is open-source and available under the **MIT License**.
+## 🛠️ Future Improvements
+- Add authentication & authorization
+- Implement **Kafka/RabbitMQ** for message queuing
+- Store historical data in **InfluxDB** (Time-Series Database)
+- Improve UI with advanced charts & graphs
 
 ---
 
-### 💡 Need Help?
-If you have any questions, feel free to open an issue or contribute to the project!
+## 🎯 Conclusion
+This project demonstrates an **efficient, scalable, and optimized** approach for **real-time data streaming** using **WebSockets** instead of frequent API polling.
 
-🚀 Happy Coding!
+For any issues, feel free to contribute or raise an issue. 🚀
+
+Happy Coding! 😊
+
