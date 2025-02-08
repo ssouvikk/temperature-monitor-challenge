@@ -10,6 +10,8 @@ app.use(cors());
 
 mongoose.connect(DB_URL).then(() => console.log("✅ Database Connected!"));
 
+app.get('/db', (req, res) => res.json(DB_URL))
+
 app.get("/api/temperatures", async (req, res) => {
     try {
         const data = await Temperature.find().sort({ timestamp: -1 }).limit(10);

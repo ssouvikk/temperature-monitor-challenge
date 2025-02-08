@@ -4,7 +4,7 @@ const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { Temperature } = require("./Models");
-const { PORT, FRONT_URL } = require("./Config");
+const { PORT, FRONT_URL, DB_URL } = require("./Config");
 
 const app = express();
 const server = http.createServer(app);
@@ -15,12 +15,14 @@ const io = socketIo(server, {
     }
 });
 
-mongoose.connect("mongodb://localhost:27017/temperatureDB").then(() => {
+mongoose.connect(DB_URL).then(() => {
     console.log("✅ Database Connected!");
 });
 
 app.use(cors());
 app.use(express.json());
+
+app.get('/db', (req, res) => res.json(DB_URL))
 
 // WebSocket Connection Handling
 io.on("connection", (socket) => {
