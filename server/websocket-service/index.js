@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: FRONT_URL,
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -34,9 +34,10 @@ io.on("connection", (socket) => {
             const newReading = new Temperature(data);
             await newReading.save();
             
-            io.emit("temperatureUpdate", newReading);
+            console.log("📡 Emitting Data to Clients:", newReading);
+            io.emit("temperatureUpdate", newReading);  // নিশ্চিত করো যে এটি ঠিকভাবে কাজ করছে
         } catch (error) {
-            console.log('Error ---------- ' + error.message)            
+            console.log('❌ Error: ' + error.message);
         }
     });
 
@@ -44,6 +45,7 @@ io.on("connection", (socket) => {
         console.log("❌ Client Disconnected");
     });
 });
+
 
 // const PORT = 6001;
 server.listen(PORT, () => console.log(`🚀 WebSocket Service running on port ${PORT}`));
