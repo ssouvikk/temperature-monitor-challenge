@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  temperature-service:
+    build: ./temperature-service
+    container_name: temperature-service
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - DB_URL=mongodb://mongodb:27017/temperatureDB
+
+  websocket-service:
+    build: ./websocket-service
+    container_name: websocket-service
+    ports:
+      - "6001:6001"
+    depends_on:
+      - temperature-service
+
+  sensor-service:
+    build: ./sensor-service
+    container_name: sensor-service
+    depends_on:
+      - temperature-service
+
+  frontend:
+    build: ./client
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - websocket-service
+
+volumes:
+  mongodb_data:
