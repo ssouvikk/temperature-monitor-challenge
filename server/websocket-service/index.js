@@ -3,8 +3,8 @@ const http = require("http");
 const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { Temperature } = require("../Models");
-const { PORT, DB_URL } = require("./Config");
+const { Temperature } = require("./Models");
+const { PORT } = require("./Config");
 
 const app = express();
 const server = http.createServer(app);

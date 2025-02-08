@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { PORT, DB_URL } = require("./Config");
-const { Temperature } = require("../Models");
+const { Temperature } = require("./Models");
 
 const app = express();
 app.use(express.json());
