@@ -9,13 +9,21 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  server:
+    build: ./server
+    container_name: server
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongodb
+
   temperature-service:
     build: ./server/temperature-service
     container_name: temperature-service
     ports:
       - "5000:5000"
     depends_on:
-      - mongodb
+      - server
     environment:
       - DB_URL=mongodb://mongodb:27017/temperatureDB
 
