@@ -8,14 +8,11 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-
-  server:
-    build: ./server
-    container_name: server
-    ports:
-      - "5002:5002"
-    depends_on:
-      - mongodb
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   temperature-service:
     build: ./server/temperature-service
@@ -23,9 +20,10 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - server
+      - mongodb
     environment:
       - DB_URL=mongodb://mongodb:27017/temperatureDB
+    restart: always
 
   websocket-service:
     build: ./server/websocket-service
@@ -34,12 +32,16 @@ services:
       - "6001:6001"
     depends_on:
       - temperature-service
+    environment:
+      - DB_URL=mongodb://mongodb:27017/temperatureDB
+    restart: always
 
   sensor-service:
     build: ./server/sensor-service
     container_name: sensor-service
     depends_on:
-      - temperature-service
+      - websocket-service
+    restart: always
 
   frontend:
     build: ./client
