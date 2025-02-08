@@ -4,6 +4,7 @@ const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { Temperature } = require("../Models");
+const { PORT, DB_URL } = require("./Config");
 
 const app = express();
 const server = http.createServer(app);
@@ -14,7 +15,6 @@ const io = socketIo(server, {
     }
 });
 
-// MongoDB কানেকশন
 mongoose.connect("mongodb://localhost:27017/temperatureDB").then(() => {
     console.log("✅ Database Connected!");
 });
@@ -28,13 +28,14 @@ io.on("connection", (socket) => {
 
     socket.on("newTemperatureData", async (data) => {
         console.log("📡 Received Data from Sensor:", data);
-
-        // MongoDB-তে সেভ করা
-        const newReading = new Temperature(data);
-        await newReading.save();
-
-        // লাইভ আপডেট ব্রডকাস্ট করা
-        io.emit("temperatureUpdate", newReading);
+        try {
+            const newReading = new Temperature(data);
+            await newReading.save();
+            
+            io.emit("temperatureUpdate", newReading);
+        } catch (error) {
+            console.log('Error ---------- ' + error.message)            
+        }
     });
 
     socket.on("disconnect", () => {
@@ -42,6 +43,5 @@ io.on("connection", (socket) => {
     });
 });
 
-// Start Server
-const PORT = 6001;
+// const PORT = 6001;
 server.listen(PORT, () => console.log(`🚀 WebSocket Service running on port ${PORT}`));
