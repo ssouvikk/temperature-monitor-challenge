@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 6001
 
-CMD ["node", "websocket-service.js"]
+CMD ["node", "index.js"]

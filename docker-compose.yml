@@ -10,7 +10,7 @@ services:
       - mongodb_data:/data/db
 
   temperature-service:
-    build: ./temperature-service
+    build: ./server/temperature-service
     container_name: temperature-service
     ports:
       - "5000:5000"
@@ -20,7 +20,7 @@ services:
       - DB_URL=mongodb://mongodb:27017/temperatureDB
 
   websocket-service:
-    build: ./websocket-service
+    build: ./server/websocket-service
     container_name: websocket-service
     ports:
       - "6001:6001"
@@ -28,7 +28,7 @@ services:
       - temperature-service
 
   sensor-service:
-    build: ./sensor-service
+    build: ./server/sensor-service
     container_name: sensor-service
     depends_on:
       - temperature-service

@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5001
 
 # Start the sensor service
-CMD ["node", "sensor-service.js"]
+CMD ["node", "index.js"]
