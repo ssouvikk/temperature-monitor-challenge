@@ -1,6 +1,7 @@
 const io = require("socket.io-client");
+const { SOCKET_URL } = require("./Config");
 
-const socket = io("http://localhost:6001"); 
+const socket = io(SOCKET_URL);
 
 const generateRandomTemperature = () => (Math.random() * (40 - 10) + 10).toFixed(2);
 

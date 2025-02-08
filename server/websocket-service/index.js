@@ -4,13 +4,13 @@ const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { Temperature } = require("./Models");
-const { PORT } = require("./Config");
+const { PORT, FRONT_URL } = require("./Config");
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: FRONT_URL,
         methods: ["GET", "POST"]
     }
 });
