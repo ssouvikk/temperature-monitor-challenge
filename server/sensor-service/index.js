@@ -6,8 +6,8 @@ let socket;
 const connectToSocket = () => {
     console.log("🔄 Trying to connect to WebSocket...");
     socket = io(SOCKET_URL, {
-        reconnectionAttempts: 10,  // সর্বোচ্চ ১০ বার পুনরায় চেষ্টা করবে
-        reconnectionDelay: 3000  // প্রতিবার ৩ সেকেন্ড পর পর চেষ্টা করবে
+        reconnectionAttempts: 10,
+        reconnectionDelay: 3000 
     });
 
     socket.on("connect", () => {

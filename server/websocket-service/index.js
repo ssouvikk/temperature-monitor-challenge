@@ -4,7 +4,7 @@ const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { Temperature } = require("./Models");
-const { PORT, FRONT_URL, DB_URL } = require("./Config");
+const { PORT, DB_URL } = require("./Config");
 
 const app = express();
 const server = http.createServer(app);
@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
             await newReading.save();
             
             console.log("📡 Emitting Data to Clients:", newReading);
-            io.emit("temperatureUpdate", newReading);  // নিশ্চিত করো যে এটি ঠিকভাবে কাজ করছে
+            io.emit("temperatureUpdate", newReading);
         } catch (error) {
             console.log('❌ Error: ' + error.message);
         }
@@ -47,5 +47,4 @@ io.on("connection", (socket) => {
 });
 
 
-// const PORT = 6001;
 server.listen(PORT, () => console.log(`🚀 WebSocket Service running on port ${PORT}`));
